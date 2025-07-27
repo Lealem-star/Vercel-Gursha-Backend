@@ -28,12 +28,30 @@ const PORT = process.env.PORT || 5000;
 
 console.log(`🚀 Starting server on port ${PORT}...`);
 
-app.use(cors({
-    origin: 'https://vercel-gursha-frontend.vercel.app',
+// CORS configuration with debugging
+const corsOptions = {
+    origin: function (origin, callback) {
+        console.log('🌐 CORS request from origin:', origin);
+        const allowedOrigins = ['https://vercel-gursha-frontend.vercel.app', 'https://vercel-gursha-frontend.vercel.app/'];
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log('❌ CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']  //to be changed later to vercel url
-}));
+    allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
+};
+
+app.use(cors(corsOptions));
+
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`📨 ${req.method} ${req.path} - Origin: ${req.headers.origin} - ${new Date().toISOString()}`);
+    next();
+});
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
