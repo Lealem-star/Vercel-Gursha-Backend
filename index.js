@@ -61,8 +61,8 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
-app.use('/api/auth', authRoutes);
-app.use('/api/', adminRoutes);
+app.use('/api', authRoutes);
+app.use('/api', adminRoutes);
 app.use('/api', userRoutes);
 app.use('/api', gameRoutes);
 app.use('/api', participantRoutes);
