@@ -14,6 +14,10 @@ const { createAdminUser } = require('./scripts/createAdmin');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(cors({
+    origin: 'https://vercel-gursha-frontend.vercel.app/'  //to be changed later to vercel url
+}));
+
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
