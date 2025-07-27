@@ -1,8 +1,17 @@
-require('dotenv').config();
+try {
+    require('dotenv').config();
+    console.log('✅ Environment variables loaded');
+} catch (error) {
+    console.error('❌ Error loading environment variables:', error);
+}
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+
+console.log('📦 Loading dependencies...');
+
 const connectDB = require('./config/db'); // Database configuration
 const adminRoutes = require('./routes/AdminRoutes'); // Admin routes
 const userRoutes = require('./routes/UserRoutes');
@@ -11,8 +20,13 @@ const participantRoutes = require('./routes/ParticipantRoutes');
 const prizeRoutes = require('./routes/PrizeRoutes');
 const authRoutes = require('./routes/auth'); // Authentication routes
 const { createAdminUser } = require('./scripts/createAdmin');
+
+console.log('✅ All dependencies loaded successfully');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+console.log(`🚀 Starting server on port ${PORT}...`);
 
 app.use(cors({
     origin: 'https://vercel-gursha-frontend.vercel.app',
@@ -47,6 +61,14 @@ connectDB().then(() => {
     console.error('Failed to connect to database:', error);
 });
 
+// Root route for health check
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Gursha Backend API is running!',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/', adminRoutes);
@@ -55,7 +77,30 @@ app.use('/api', gameRoutes);
 app.use('/api', participantRoutes);
 app.use('/api', prizeRoutes);
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+// 404 handler
+app.use('*', (req, res) => {
+    res.status(404).json({
+        error: 'Route not found',
+        path: req.originalUrl
+    });
 });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Server error:', err);
+    res.status(500).json({
+        error: 'Internal server error',
+        message: err.message
+    });
+});
+
+// Start the server
+try {
+    app.listen(PORT, () => {
+        console.log(`✅ Server is running on http://localhost:${PORT}`);
+        console.log(`🌐 CORS enabled for: https://vercel-gursha-frontend.vercel.app`);
+    });
+} catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+}
