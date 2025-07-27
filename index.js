@@ -43,6 +43,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
 connectDB().then(() => {
@@ -61,12 +62,12 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
-app.use('/api', authRoutes);
-app.use('/api', adminRoutes);
-app.use('/api', userRoutes);
-app.use('/api', gameRoutes);
-app.use('/api', participantRoutes);
-app.use('/api', prizeRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/games', gameRoutes);
+app.use('/api/participants', participantRoutes);
+app.use('/api/prizes', prizeRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
