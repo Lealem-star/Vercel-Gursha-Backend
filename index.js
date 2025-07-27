@@ -1,51 +1,28 @@
-try {
-    require('dotenv').config();
-    console.log('✅ Environment variables loaded');
-} catch (error) {
-    console.error('❌ Error loading environment variables:', error);
-}
-
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
-console.log('📦 Loading dependencies...');
-
-const connectDB = require('./config/db'); // Database configuration
-const adminRoutes = require('./routes/AdminRoutes'); // Admin routes
+const connectDB = require('./config/db');
+const adminRoutes = require('./routes/AdminRoutes');
 const userRoutes = require('./routes/UserRoutes');
 const gameRoutes = require('./routes/GameRoutes');
 const participantRoutes = require('./routes/ParticipantRoutes');
 const prizeRoutes = require('./routes/PrizeRoutes');
-const authRoutes = require('./routes/auth'); // Authentication routes
+const authRoutes = require('./routes/auth');
 const { createAdminUser } = require('./scripts/createAdmin');
-
-console.log('✅ All dependencies loaded successfully');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-console.log(`🚀 Starting server on port ${PORT}...`);
-
-// CORS configuration with debugging
-const corsOptions = {
-    origin: function (origin, callback) {
-        console.log('🌐 CORS request from origin:', origin);
-        const allowedOrigins = ['https://vercel-gursha-frontend.vercel.app', 'https://vercel-gursha-frontend.vercel.app/'];
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log('❌ CORS blocked origin:', origin);
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+// Simple CORS configuration
+app.use(cors({
+    origin: 'https://vercel-gursha-frontend.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
-};
-
-app.use(cors(corsOptions));
+}));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -67,16 +44,12 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Connect to MongoDB and create admin user
+// Connect to MongoDB
 connectDB().then(() => {
-    // Call the createAdminUser function after DB connection is established
-    try {
-        createAdminUser();
-    } catch (error) {
-        console.error('Error creating admin user:', error);
-    }
+    console.log('✅ Database connected');
+    createAdminUser().catch(err => console.error('Admin creation error:', err));
 }).catch(error => {
-    console.error('Failed to connect to database:', error);
+    console.error('❌ Database connection failed:', error);
 });
 
 // Root route for health check
@@ -113,12 +86,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-try {
-    app.listen(PORT, () => {
-        console.log(`✅ Server is running on http://localhost:${PORT}`);
-        console.log(`🌐 CORS enabled for: https://vercel-gursha-frontend.vercel.app`);
-    });
-} catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-}
+app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+});
