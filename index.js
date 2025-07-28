@@ -53,6 +53,7 @@ connectDB().then(() => {
 });
 
 // Root route for health check
+console.log('Registering route: /');
 app.get('/', (req, res) => {
     res.json({
         message: 'Gursha Backend API is running!',
@@ -61,15 +62,27 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
+console.log('Registering route: /api/auth');
 app.use('/api/auth', authRoutes);
+
+console.log('Registering route: /api/admin');
 app.use('/api/admin', adminRoutes);
+
+console.log('Registering route: /api/users');
 app.use('/api/users', userRoutes);
+
+console.log('Registering route: /api/games');
 app.use('/api/games', gameRoutes);
+
+console.log('Registering route: /api/participants');
 app.use('/api/participants', participantRoutes);
+
+console.log('Registering route: /api/prizes');
 app.use('/api/prizes', prizeRoutes);
 
-// 404 handler
-app.use('*', (req, res) => {
+// 404 handler - use a more compatible approach
+console.log('Registering route: 404 handler');
+app.use((req, res) => {
     res.status(404).json({
         error: 'Route not found',
         path: req.originalUrl

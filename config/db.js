@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
     try {
         // Check if MONGODB_URI is defined, use fallback for development
-        const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://meseretlealem8:oCqluaVBJKgTowHM@cluster0.pv9y913.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+        const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://meseretlealem8:oCqluaVBJKgTowHM@cluster0.pv9y913.mongodb.net/gursha?retryWrites=true&w=majority&appName=Cluster0';
         // 'mongodb://localhost:27017/gursha_lottery';
 
         console.log('Attempting to connect to MongoDB...');
