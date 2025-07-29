@@ -1,5 +1,5 @@
 const Game = require('../models/Game');
-
+const Participant = require('../models/Participant'); 
 // Create a new game
 exports.createGame = async (req, res) => {
   const { name, mealTime, entranceFee, prize, gameControllerId } = req.body;
@@ -92,5 +92,17 @@ exports.getControllerRevenue = async (req, res) => {
     res.status(200).json({ totalRevenue });
   } catch (error) {
     res.status(500).json({ message: 'Error calculating revenue for controller', error });
+  }
+};
+
+// Add this function to your GameController
+
+exports.getParticipantsByGameId = async (req, res) => {
+  try {
+    const { gameId } = req.params;
+    const participants = await Participant.find({ game: gameId });
+    res.json(participants);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch participants', details: error.message });
   }
 };
