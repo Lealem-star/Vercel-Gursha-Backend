@@ -18,4 +18,7 @@ router.delete('/:gameId', gameController.deleteGame); // Delete a game
 console.log('Game: Registering route: /:gameId (GET)');
 router.get('/:gameId', gameController.getGameById); // Get a specific game by ID
 
+console.log('Game: Registering route: /:gameId/participants (GET)');
+router.get('/:gameId/participants', gameController.getParticipantsByGameId);
+
 module.exports = router;
