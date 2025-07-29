@@ -4,10 +4,10 @@ const participantController = require('../controllers/ParticipantController');
 
 // Participant routes
 console.log('Participant: Registering route: /games/:gameId (POST)');
-router.post('/games/:gameId', participantController.createParticipant); // Add a participant to a game
+router.post('/games/:gameId/participants', participantController.createParticipant); // Add a participant to a game
 
 console.log('Participant: Registering route: /games/:gameId (GET)');
-router.get('/games/:gameId', participantController.getParticipants); // Get all participants for a specific game
+router.get('/games/:gameId/participants', participantController.getParticipants); // Get all participants for a specific game
 
 console.log('Participant: Registering route: /:participantId (PUT)');
 router.put('/:participantId', participantController.updateParticipant); // Update a participant
