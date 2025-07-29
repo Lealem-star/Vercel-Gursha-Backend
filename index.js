@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 
 // Simple CORS configuration
 app.use(cors({
-    origin: 'https://vercel-gursha-frontend-services-it9l2g55n.vercel.app', 
+    origin: 'https://vercel-gursha-frontend-services.vercel.app', 
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['X-CSRF-Token', 'Authorization', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
