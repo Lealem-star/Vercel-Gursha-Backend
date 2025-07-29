@@ -21,7 +21,7 @@ app.use(cors({
     origin: 'https://vercel-gursha-frontend-services-it9l2g55n.vercel.app', 
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
+    allowedHeaders: ['X-CSRF-Token', 'Authorization', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Content-Type', 'Date', 'X-Api-Version']
 }));
 
 // Request logging middleware
