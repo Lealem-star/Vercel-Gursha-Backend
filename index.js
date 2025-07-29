@@ -75,7 +75,7 @@ console.log('Registering route: /api/games');
 app.use('/api/games', gameRoutes);
 
 console.log('Registering route: /api/participants');
-app.use('/api/participants', participantRoutes);
+app.use('/api', participantRoutes);
 
 console.log('Registering route: /api/prizes');
 app.use('/api/prizes', prizeRoutes);
